@@ -16,5 +16,5 @@
       "@kit/*": ["./packages/kit/src/*"]
     }
   },
-  "include": ["packages/*/src", "sites/*/src", "workers/*/src", "vite.shared.ts"]
+  "include": ["packages/*/src", "sites/*/src", "vite.shared.ts"]
 }
