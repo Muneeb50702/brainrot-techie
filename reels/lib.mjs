@@ -106,12 +106,16 @@ export async function startRecording(page, dir) {
   await cdp.send("Page.startScreencast", { format: "jpeg", quality: 95, maxWidth: 1080, maxHeight: 1920, everyNthFrame: 1 });
   return async () => {
     await cdp.send("Page.stopScreencast");
+    writeFileSync(path.join(dir, "frames.json"), JSON.stringify(frames));
     return frames;
   };
 }
 
 /** Variable-timing frames → constant 30fps H.264, IG-friendly. */
-export function encode(frames, dir, out, { trimStart = 0 } = {}) {
+export function encode(rawFrames, dir, out, { trimStart = 0 } = {}) {
+  // Cross-origin iframes composite separately, so screencast frames can arrive out of
+  // timestamp order. Sort by capture time or backward jumps get double-counted (stretched video).
+  const frames = [...rawFrames].sort((a, b) => a.t - b.t);
   const lines = [];
   for (let i = 0; i < frames.length; i++) {
     const next = frames[i + 1]?.t ?? frames[i].t + 1 / 30;

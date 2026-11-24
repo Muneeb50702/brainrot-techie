@@ -1,0 +1,64 @@
+@import "tailwindcss";
+@import "../../../packages/kit/src/kit.css";
+@source "../../../packages/kit/src";
+
+/* Day 003 theme: saffron monk. Warm black, saffron, jade for calm, chili for chaos.
+   Kit tokens are remapped so shared components (DayBadge, sticker, buttons) follow. */
+@theme {
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+
+  --color-saffron: #ff8f2a;
+  --color-gold: #ffd166;
+  --color-jade: #34e0b0;
+  --color-chili: #ff4040;
+  --color-robe: #b3470f;
+
+  --color-ink: #0c0705;
+  --color-ink-2: #17100b;
+  --color-line: #2c2119;
+  --color-paper: #f7ead6;
+  --color-muted: #a3907e;
+
+  /* kit slots → this site's palette */
+  --color-lime: #ff8f2a;
+  --color-pink: #ff4040;
+  --color-cyan: #34e0b0;
+  --color-violet: #ffd166;
+}
+
+body {
+  overflow-x: clip;
+}
+
+/* During a run: no scrolling, no zoom, no text selection, no long-press menu. */
+.playing,
+.playing body {
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(0.86); filter: brightness(0.9); }
+  50% { transform: scale(1.06); filter: brightness(1.15); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-9px, 4px) rotate(-1deg); }
+  40% { transform: translate(8px, -5px) rotate(1deg); }
+  60% { transform: translate(-6px, -3px); }
+  80% { transform: translate(5px, 6px) rotate(-0.5deg); }
+}
+.shake { animation: shake 0.45s ease-in-out 2; }
+
+@keyframes glitch {
+  0% { clip-path: inset(10% 0 70% 0); transform: translate(-6px, 0); }
+  25% { clip-path: inset(60% 0 10% 0); transform: translate(6px, 0); }
+  50% { clip-path: inset(30% 0 40% 0); transform: translate(-3px, 0); }
+  75% { clip-path: inset(80% 0 5% 0); transform: translate(4px, 0); }
+  100% { clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+}

@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { BorderBeamPanel } from "@kit/BorderBeamPanel";
 import { Marquee } from "@kit/Marquee";
 import { Bolt } from "@kit/Bolt";
+import { SourceLink } from "@kit/SourceLink";
 
 const TRY = ["torvalds", "gaearon", "sindresorhus", "yyx990803"];
 
@@ -116,7 +117,9 @@ export function Hero({ onSubmit, error }: { onSubmit: (u: string) => void; error
         ))}
       </div>
 
-      <div className="mt-14 w-screen max-w-none space-y-3">
+      <SourceLink slug="gitaura" className="mt-6" />
+
+      <div className="mt-12 w-screen max-w-none space-y-3">
         <Marquee duration={45}>
           {TICKER.slice(0, 5).map(([p, l]) => (
             <Chip key={l} p={p} label={l} />

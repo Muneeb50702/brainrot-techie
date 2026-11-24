@@ -12,6 +12,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["scripts/run.mjs", "dev", "life-exe", "--port", "5174", "--strictPort"],
       "port": 5174
+    },
+    {
+      "name": "monkmode",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/run.mjs", "dev", "monkmode", "--port", "5175", "--strictPort"],
+      "port": 5175
     }
   ]
 }
