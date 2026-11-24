@@ -7,14 +7,15 @@ import { rankFor } from "../game/content";
 const SYS = "system-ui, -apple-system, sans-serif";
 
 /** A single stray hair lying across the orb. Dark strand + faint highlight, slight drift. */
-export function Hair({ label }: { label: string }) {
+export function Hair({ label, pos }: { label: string; pos: { x: number; y: number; rot: number } }) {
   return (
     <motion.svg
       data-bait={label}
       viewBox="0 0 220 120"
-      className="pointer-events-auto absolute left-1/2 top-[38%] w-[230px] -translate-x-1/2"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1, rotate: [0, 1.5, -1, 0], x: [0, 3, -2, 0] }}
+      className="pointer-events-auto absolute w-[230px]"
+      style={{ left: `calc(${pos.x}% - 115px)`, top: `${pos.y}%` }}
+      initial={{ opacity: 0, rotate: pos.rot }}
+      animate={{ opacity: 1, rotate: [pos.rot, pos.rot + 1.5, pos.rot - 1, pos.rot], x: [0, 3, -2, 0] }}
       transition={{ opacity: { duration: 0.2 }, rotate: { duration: 6, repeat: Infinity }, x: { duration: 6, repeat: Infinity } }}
     >
       <path d="M6 88 C 40 70, 62 96, 92 74 S 140 30, 168 52 S 200 90, 214 40" fill="none" stroke="#1a0f08" strokeWidth="1.6" strokeLinecap="round" />
@@ -53,7 +54,7 @@ export function Dim({ label, amount }: { label: string; amount: number }) {
   return <div data-bait={label} className="pointer-events-auto absolute inset-0 z-30 bg-black" style={{ opacity: amount }} />;
 }
 
-export function LockScreen({ label }: { label: string }) {
+export function LockScreen({ label, msg }: { label: string; msg: { icon: string; from: string; text: string } }) {
   const now = new Date();
   const time = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit", hour12: false });
   const date = now.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
@@ -75,10 +76,10 @@ export function LockScreen({ label }: { label: string }) {
         transition={{ delay: 0.9 }}
         className="mt-10 flex w-full max-w-sm items-start gap-3 rounded-[22px] bg-white/12 p-3.5 backdrop-blur-xl"
       >
-        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10 text-xl">💬</span>
+        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white/10 text-xl">{msg.icon}</span>
         <span className="text-left">
-          <span className="block text-[15px] font-semibold">mom</span>
-          <span className="block text-[14px] text-white/75">why aren't you answering?? call me back</span>
+          <span className="block text-[15px] font-semibold">{msg.from}</span>
+          <span className="block text-[14px] text-white/75">{msg.text}</span>
         </span>
       </motion.div>
       <div className="mt-auto mb-8 flex flex-col items-center gap-3">
@@ -91,14 +92,18 @@ export function LockScreen({ label }: { label: string }) {
   );
 }
 
-export function Bug({ label }: { label: string }) {
+export function Bug({ label, fromRight, dur }: { label: string; fromRight: boolean; dur: number }) {
   return (
     <motion.div
       data-bait={label}
       className="pointer-events-auto absolute z-20 text-[42px]"
-      initial={{ left: "-12%", top: "72%", rotate: 80 }}
-      animate={{ left: ["-12%", "25%", "45%", "62%", "110%"], top: ["72%", "60%", "48%", "40%", "22%"], rotate: [80, 60, 70, 50, 60] }}
-      transition={{ duration: 5.5, ease: "linear" }}
+      initial={fromRight ? { left: "110%", top: "30%", rotate: -110 } : { left: "-12%", top: "72%", rotate: 80 }}
+      animate={
+        fromRight
+          ? { left: ["110%", "70%", "50%", "30%", "-14%"], top: ["30%", "42%", "50%", "62%", "78%"], rotate: [-110, -125, -115, -130, -120] }
+          : { left: ["-12%", "25%", "45%", "62%", "110%"], top: ["72%", "60%", "48%", "40%", "22%"], rotate: [80, 60, 70, 50, 60] }
+      }
+      transition={{ duration: dur, ease: "linear" }}
     >
       <motion.span className="block" animate={{ scaleX: [1, 0.85, 1] }} transition={{ duration: 0.18, repeat: Infinity }}>
         🪳
@@ -108,9 +113,9 @@ export function Bug({ label }: { label: string }) {
 }
 
 /** Radial glass crack from an impact point. Deterministic per mount. */
-export function Crack({ label }: { label: string }) {
+export function Crack({ label, impact }: { label: string; impact: { x: number; y: number } }) {
   const lines = useMemo(() => {
-    const cx = 260, cy = 260;
+    const cx = (impact.x / 100) * 520, cy = (impact.y / 100) * 520;
     const out: string[] = [];
     for (let i = 0; i < 13; i++) {
       const a = (i / 13) * Math.PI * 2 + Math.random() * 0.4;
@@ -136,7 +141,7 @@ export function Crack({ label }: { label: string }) {
       out.push(`M${pts.join(" L")}`);
     }
     return out;
-  }, []);
+  }, [impact.x, impact.y]);
   return (
     <motion.svg
       data-bait={label}
@@ -153,7 +158,7 @@ export function Crack({ label }: { label: string }) {
           <path d={d} fill="none" stroke="rgba(255,255,255,.85)" strokeWidth="1" />
         </g>
       ))}
-      <circle cx="260" cy="260" r="7" fill="rgba(255,255,255,.9)" />
+      <circle cx={(impact.x / 100) * 520} cy={(impact.y / 100) * 520} r="7" fill="rgba(255,255,255,.9)" />
     </motion.svg>
   );
 }

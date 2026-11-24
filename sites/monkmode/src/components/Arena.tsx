@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence } from "motion/react";
-import { NOTIFS, POPUPS, T, TRAPS, ZEN, spawnGap, type Notif, type Popup, type TrapKind } from "../game/content";
+import { NOTIFS, POPUPS, T, ZEN, makePlan, spawnGap, type Notif, type Plan, type Popup, type TrapKind } from "../game/content";
 import * as sfx from "../game/audio";
 import { ClaimButton, FakeWin, Floater, GlitchOverlay, IncomingCall, NotifBanner, PopupCard, SkipAd } from "./Baits";
 import { Bug, Crack, Dim, FakeOver, FreezeDialog, Hair, LockScreen, Mock, PauseOverlay } from "./Traps";
 
-const activeTraps = (t: number) => TRAPS.filter((tr) => t >= tr.at && t < tr.at + tr.dur);
+const activeTraps = (plan: Plan, t: number) => plan.traps.filter((tr) => t >= tr.at && t < tr.at + tr.dur);
 
 export type Outcome = "lose" | "trap" | "win";
 export type RunResult = { seconds: number; outcome: Outcome; by: string };
@@ -36,7 +36,12 @@ function weighted(t: number): Bait["kind"] {
 }
 
 /** `speed` > 1 only for demo recordings (?speed=2.5); the game clock runs that much faster. */
-export function Arena({ onEnd, speed = 1 }: { onEnd: (r: RunResult) => void; speed?: number }) {
+export function Arena({ onEnd, speed = 1, seed }: { onEnd: (r: RunResult) => void; speed?: number; seed?: number }) {
+  // New trap order + timing + variants every run (a fixed seed replays a run, used for reels).
+  const plan = useMemo(() => makePlan(seed), [seed]);
+  useEffect(() => {
+    (window as unknown as { __monkPlan?: Plan }).__monkPlan = plan;
+  }, [plan]);
   const [t, setT] = useState(0);
   const [baits, setBaits] = useState<Bait[]>([]);
   const [fakeWin, setFakeWin] = useState(false);
@@ -113,7 +118,7 @@ export function Arena({ onEnd, speed = 1 }: { onEnd: (r: RunResult) => void; spe
       }
 
       // Scripted traps: fire each one's entry effect exactly once.
-      const traps = activeTraps(now);
+      const traps = activeTraps(plan, now);
       for (const tr of traps) {
         if (fired.current.has(tr.kind)) continue;
         fired.current.add(tr.kind);
@@ -142,7 +147,7 @@ export function Arena({ onEnd, speed = 1 }: { onEnd: (r: RunResult) => void; spe
           calmed.current = true;
           setBaits([]);
         }
-      } else if (now >= T.call && !callDone.current) {
+      } else if (now >= plan.callAt && !callDone.current) {
         callDone.current = true;
         setBaits([...alive.filter((b) => b.kind === "notif"), { id: ++ids.current, kind: "call", born: now, until: now + T.callDuration }]);
         sfx.startRing();
@@ -155,7 +160,7 @@ export function Arena({ onEnd, speed = 1 }: { onEnd: (r: RunResult) => void; spe
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [finish, spawn, speed]);
+  }, [finish, spawn, speed, plan]);
 
   // Any touch, key, wheel or leaving the tab = you lose. Capture phase so nothing can swallow it.
   useEffect(() => {
@@ -201,11 +206,11 @@ export function Arena({ onEnd, speed = 1 }: { onEnd: (r: RunResult) => void; spe
     };
   }, []);
 
-  const traps = activeTraps(t);
+  const traps = activeTraps(plan, t);
   const trap = (k: TrapKind) => traps.find((tr) => tr.kind === k);
   const freeze = trap("freeze");
   const shownT = freeze ? freeze.at : t; // the clock "hangs" during the fake freeze
-  const mock = TRAPS.find((tr) => tr.after && t >= tr.at + tr.dur && t < tr.at + tr.dur + 2.3);
+  const mock = plan.traps.find((tr) => tr.after && t >= tr.at + tr.dur && t < tr.at + tr.dur + 2.3);
   const dim = trap("dim");
 
   const progress = Math.min(1, shownT / T.fakeWin);
@@ -265,15 +270,15 @@ export function Arena({ onEnd, speed = 1 }: { onEnd: (r: RunResult) => void; spe
           {skip ? <SkipAd key={skip.id} seconds={Math.max(0, 3 - Math.floor(t - skip.born))} /> : null}
         </AnimatePresence>
       </div>
-      <AnimatePresence>{call ? <IncomingCall key={call.id} declineIn={Math.max(0, Math.ceil(call.until - t))} /> : null}</AnimatePresence>
+      <AnimatePresence>{call ? <IncomingCall key={call.id} caller={plan.caller} declineIn={Math.max(0, Math.ceil(call.until - t))} /> : null}</AnimatePresence>
 
       {/* scripted reflex traps */}
-      {trap("hair") ? <Hair label={trap("hair")!.label} /> : null}
+      {trap("hair") ? <Hair label={trap("hair")!.label} pos={plan.hair} /> : null}
       {freeze ? <FreezeDialog label={freeze.label} showDialog={t - freeze.at > 1.4} /> : null}
-      {trap("bug") ? <Bug label={trap("bug")!.label} /> : null}
-      {trap("crack") ? <Crack label={trap("crack")!.label} /> : null}
+      {trap("bug") ? <Bug label={trap("bug")!.label} fromRight={plan.bugFromRight} dur={trap("bug")!.dur} /> : null}
+      {trap("crack") ? <Crack label={trap("crack")!.label} impact={plan.crack} /> : null}
       {dim ? <Dim label={dim.label} amount={Math.min(1, (t - dim.at) / (dim.dur - 0.4))} /> : null}
-      {trap("lock") ? <LockScreen label={trap("lock")!.label} /> : null}
+      {trap("lock") ? <LockScreen label={trap("lock")!.label} msg={plan.lockMsg} /> : null}
       {trap("pause") ? <PauseOverlay label={trap("pause")!.label} /> : null}
       {trap("fakeover") ? <FakeOver label={trap("fakeover")!.label} seconds={trap("fakeover")!.at - 0.37} /> : null}
       <AnimatePresence>{mock ? <Mock key={mock.kind} text={mock.after!} /> : null}</AnimatePresence>

@@ -14,6 +14,8 @@ const GrainBg = lazy(() => import("@kit/GrainBg").then((m) => ({ default: m.Grai
 const DAY = 3;
 // Demo-only: ?speed=2.5 fast-forwards the game clock for reel recordings.
 const SPEED = Math.min(4, Math.max(1, Number(new URLSearchParams(location.search).get("speed")) || 1));
+// Demo-only: ?seed=42 replays the same trap plan (reel recordings). Normal runs are random.
+const SEED = new URLSearchParams(location.search).has("seed") ? Number(new URLSearchParams(location.search).get("seed")) | 0 : undefined;
 const BEST_KEY = "monkmode:best";
 
 type Phase = "menu" | "countdown" | "play" | "over";
@@ -94,7 +96,7 @@ export default function App() {
       </div>
 
       {phase === "countdown" && <Countdown onDone={() => setPhase("play")} />}
-      {phase === "play" && <Arena onEnd={onEnd} speed={SPEED} />}
+      {phase === "play" && <Arena onEnd={onEnd} speed={SPEED} seed={SEED} />}
     </>
   );
 }

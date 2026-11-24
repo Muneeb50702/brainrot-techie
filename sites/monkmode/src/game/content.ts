@@ -59,7 +59,6 @@ export const ZEN: [number, string][] = [
 export const T = {
   notifsFrom: 3,
   popupsFrom: 8,
-  call: 17,
   callDuration: 6,
   chaosFrom: 34,
   maxChaosFrom: 44,
@@ -74,16 +73,143 @@ export const T = {
 export type TrapKind = "hair" | "freeze" | "dim" | "lock" | "bug" | "crack" | "pause" | "fakeover";
 export type Trap = { kind: TrapKind; at: number; dur: number; blocking: boolean; label: string; after?: string };
 
-export const TRAPS: Trap[] = [
-  { kind: "hair", at: 6, dur: 7, blocking: false, label: "a fake hair on your screen 🪮 (it was never there)" },
-  { kind: "freeze", at: 11.5, dur: 4, blocking: true, label: "the fake 'not responding' freeze 🧊", after: "it's not frozen. you are 🧊" },
-  { kind: "dim", at: 25, dur: 3, blocking: true, label: "your screen 'turning off' 🌑 (it wasn't)" },
-  { kind: "lock", at: 28, dur: 5.5, blocking: true, label: "the fake lock screen 🔒 (your phone never locked)", after: "not locked lol 🔒 still in monk mode" },
-  { kind: "bug", at: 37.5, dur: 5.5, blocking: false, label: "a fake bug crawling on your screen 🪳" },
-  { kind: "crack", at: 42, dur: 4.5, blocking: false, label: "a fake screen crack 💔 (your screen is fine)", after: "your screen is fine. your discipline isn't 💔" },
-  { kind: "pause", at: 46.5, dur: 4, blocking: true, label: "the fake pause screen ⏸", after: "there's no pause button in monk mode 🧘" },
-  { kind: "fakeover", at: 51, dur: 5.5, blocking: true, label: "the FAKE game over screen 🤡 (you never touched it)", after: "jk 👀 you never touched it. keep going" },
+/** Trap catalog. Timing is NOT fixed: makePlan() shuffles order + timing every run. */
+export const TRAP_DEFS: Record<TrapKind, Omit<Trap, "at">> = {
+  hair: { kind: "hair", dur: 5, blocking: false, label: "a fake hair on your screen 🪮 (it was never there)" },
+  freeze: { kind: "freeze", dur: 4, blocking: true, label: "the fake 'not responding' freeze 🧊", after: "it's not frozen. you are 🧊" },
+  dim: { kind: "dim", dur: 3, blocking: true, label: "your screen 'turning off' 🌑 (it wasn't)" },
+  lock: { kind: "lock", dur: 5, blocking: true, label: "the fake lock screen 🔒 (your phone never locked)", after: "not locked lol 🔒 still in monk mode" },
+  bug: { kind: "bug", dur: 4.5, blocking: false, label: "a fake bug crawling on your screen 🪳" },
+  crack: { kind: "crack", dur: 4, blocking: false, label: "a fake screen crack 💔 (your screen is fine)", after: "your screen is fine. your discipline isn't 💔" },
+  pause: { kind: "pause", dur: 4, blocking: true, label: "the fake pause screen ⏸", after: "there's no pause button in monk mode 🧘" },
+  fakeover: { kind: "fakeover", dur: 5, blocking: true, label: "the FAKE game over screen 🤡 (you never touched it)", after: "jk 👀 you never touched it. keep going" },
+};
+export const isTrapLabel = (label: string) => Object.values(TRAP_DEFS).some((d) => d.label === label);
+
+export type Caller = { name: string; emoji: string; line: string };
+const CALLERS: Caller[] = [
+  { name: "bestie", emoji: "💅", line: "PICK UP IT'S AN EMERGENCY" },
+  { name: "mom", emoji: "👩", line: "pick up. now." },
+  { name: "your crush", emoji: "🫣", line: "they never call… what if it's important" },
+  { name: "unknown number", emoji: "❓", line: "could be important…" },
+  { name: "delivery guy", emoji: "🛵", line: "i'm outside, come get it" },
+  { name: "boss", emoji: "💼", line: "quick question 🙂" },
 ];
+const LOCK_MSGS = [
+  { icon: "💬", from: "mom", text: "why aren't you answering?? call me back" },
+  { icon: "🫣", from: "your crush", text: "hey u up? 👀" },
+  { icon: "🫂", from: "the gc", text: "99+ new messages · WAIT DID U SEE THIS" },
+  { icon: "📦", from: "delivery", text: "your order has arrived. tap to see photo" },
+  { icon: "🔥", from: "streaks", text: "your streak dies in 60 seconds 😱" },
+];
+
+export type Plan = {
+  seed: number;
+  traps: Trap[];
+  callAt: number;
+  caller: Caller;
+  lockMsg: (typeof LOCK_MSGS)[number];
+  hair: { x: number; y: number; rot: number };
+  crack: { x: number; y: number };
+  bugFromRight: boolean;
+};
+
+/** Small seeded PRNG so a seed (e.g. ?seed=42 for reel recordings) replays the same run. */
+function mulberry32(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** A fresh trap schedule for one run: shuffled order, random gaps, random variants.
+ *  Blocking (full-screen) traps never overlap; dim always flows into lock; the fake
+ *  game over never lands before 18s (or "you lasted 4s" would give it away). */
+export function makePlan(seed = (Math.random() * 2 ** 31) | 0): Plan {
+  const rnd = mulberry32(seed);
+  const pick = <X,>(a: X[]) => a[Math.floor(rnd() * a.length)];
+  const shuffle = <X,>(arr: X[]) => {
+    const out = [...arr];
+    for (let i = out.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      [out[i], out[j]] = [out[j], out[i]];
+    }
+    return out;
+  };
+  const START = 5, END = 56.5, MIN_GAP = 1.4;
+  type Unit = { id: "freeze" | "call" | "dimlock" | "pause" | "fakeover"; dur: number; tail: number };
+  const UNITS: Unit[] = [
+    { id: "freeze", dur: 4, tail: 2.3 },
+    { id: "call", dur: T.callDuration, tail: 0.6 },
+    { id: "dimlock", dur: 8, tail: 2.3 },
+    { id: "pause", dur: 4, tail: 2.3 },
+    { id: "fakeover", dur: 5, tail: 2.3 },
+  ];
+
+  let placed: { id: Unit["id"]; at: number }[] = [];
+  for (let attempt = 0; attempt < 50; attempt++) {
+    const order = shuffle(UNITS);
+    const used = order.reduce((s, u) => s + u.dur + u.tail + MIN_GAP, 0);
+    const slack = Math.max(0, END - START - used);
+    const weights = order.map(() => rnd());
+    const wsum = weights.reduce((a, b) => a + b, 0) + rnd(); // + trailing slack
+    let t = START;
+    placed = order.map((u, i) => {
+      t += MIN_GAP + (slack * weights[i]) / wsum;
+      const at = t;
+      t += u.dur + u.tail;
+      return { id: u.id, at };
+    });
+    const fo = placed.find((p) => p.id === "fakeover")!;
+    if (fo.at >= 18) break;
+  }
+
+  const traps: Trap[] = [];
+  let callAt = 20;
+  for (const p of placed) {
+    const at = +p.at.toFixed(2);
+    if (p.id === "call") callAt = at;
+    else if (p.id === "dimlock") traps.push({ ...TRAP_DEFS.dim, at }, { ...TRAP_DEFS.lock, at: at + TRAP_DEFS.dim.dur });
+    else traps.push({ ...TRAP_DEFS[p.id], at });
+  }
+
+  // Small traps go into the free windows between full-screen traps (never under one).
+  // If no window is long enough, the trap is shortened to fit, so all 8 traps always happen.
+  const busy = [...traps.filter((x) => x.blocking).map((x) => [x.at, x.at + x.dur]), [callAt, callAt + T.callDuration]].sort((x, y) => x[0] - y[0]);
+  const windows: [number, number][] = [];
+  let cursor = 3;
+  for (const [bs, be] of busy) {
+    if (bs - cursor > 0.3) windows.push([cursor, bs - 0.15]);
+    cursor = Math.max(cursor, be + 0.15);
+  }
+  if (57 - cursor > 0.3) windows.push([cursor, 57]);
+  for (const kind of shuffle(["hair", "bug", "crack"] as const)) {
+    const want = TRAP_DEFS[kind].dur;
+    const fits = windows.filter(([ws, we]) => we - ws >= want);
+    if (fits.length) {
+      const [ws, we] = pick(fits);
+      traps.push({ ...TRAP_DEFS[kind], at: +(ws + rnd() * (we - ws - want)).toFixed(2) });
+    } else {
+      const [ws, we] = windows.reduce((best, w) => (w[1] - w[0] > best[1] - best[0] ? w : best), [0, 0] as [number, number]);
+      if (we - ws >= 2.5) traps.push({ ...TRAP_DEFS[kind], at: +ws.toFixed(2), dur: +(we - ws).toFixed(2) });
+    }
+  }
+
+  return {
+    seed,
+    traps: traps.sort((a, b) => a.at - b.at),
+    callAt,
+    caller: pick(CALLERS),
+    lockMsg: pick(LOCK_MSGS),
+    hair: { x: 30 + rnd() * 40, y: 30 + rnd() * 18, rot: -40 + rnd() * 80 },
+    crack: { x: 25 + rnd() * 50, y: 25 + rnd() * 45 },
+    bugFromRight: rnd() < 0.5,
+  };
+}
 
 /** Seconds between spawns. Shrinks as the clock runs. */
 export function spawnGap(t: number) {

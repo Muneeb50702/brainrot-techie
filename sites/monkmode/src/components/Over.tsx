@@ -1,14 +1,14 @@
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
 import { copyText, nodeToPng, shareImage } from "@kit/share";
-import { rankFor, TRAPS } from "../game/content";
+import { isTrapLabel, rankFor } from "../game/content";
 import type { RunResult } from "./Arena";
 import { ShareCard } from "./ShareCard";
 
 export function Over({ r, best, newBest, onRetry, day }: { r: RunResult; best: number; newBest: boolean; onRetry: () => void; day: number }) {
   const base = rankFor(r.seconds, r.outcome);
   // Lost to a scripted fake? Your reflexes snitched, so the roast says so.
-  const rank = TRAPS.some((tr) => tr.label === r.by) ? { ...base, roast: "that was FAKE. your reflexes snitched on you 💀" } : base;
+  const rank = isTrapLabel(r.by) ? { ...base, roast: "that was FAKE. your reflexes snitched on you 💀" } : base;
   const cardRef = useRef<HTMLDivElement>(null);
   const [toast, setToast] = useState<string | null>(null);
   const won = r.outcome === "win";
@@ -89,7 +89,7 @@ export function Over({ r, best, newBest, onRetry, day }: { r: RunResult; best: n
           </button>
         </div>
       </div>
-      {!won ? <p className="mt-5 font-mono text-[11px] text-muted">psst: there are 9 traps in there. nothing you see is real 👀</p> : null}
+      {!won ? <p className="mt-5 font-mono text-[11px] text-muted">psst: 9 traps, new order every run. nothing you see is real 👀</p> : null}
 
       <ShareCard ref={cardRef} r={r} day={day} />
       {toast ? <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full bg-paper px-5 py-3 font-mono text-sm font-bold text-ink shadow-2xl">{toast}</div> : null}

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
-import type { Notif, Popup } from "../game/content";
+import type { Caller, Notif, Popup } from "../game/content";
 
 /* Every bait carries data-bait="<label>" so a tap on it reports exactly what got you. */
 
@@ -137,10 +137,10 @@ export function GlitchOverlay() {
   );
 }
 
-export function IncomingCall({ declineIn }: { declineIn: number }) {
+export function IncomingCall({ caller, declineIn }: { caller: Caller; declineIn: number }) {
   return (
     <motion.div
-      data-bait="📞 bestie calling"
+      data-bait={`📞 ${caller.name} calling`}
       initial={{ y: "100%" }}
       animate={{ y: 0 }}
       exit={{ y: "-100%", opacity: 0 }}
@@ -154,11 +154,11 @@ export function IncomingCall({ declineIn }: { declineIn: number }) {
           transition={{ duration: 1.2, repeat: Infinity }}
           className="mx-auto grid size-28 place-items-center rounded-full bg-gradient-to-br from-saffron to-chili text-6xl shadow-[0_0_60px_rgba(255,143,42,0.5)]"
         >
-          💅
+          {caller.emoji}
         </motion.div>
-        <p className="mt-6 text-[34px] font-semibold">bestie</p>
+        <p className="mt-6 text-[34px] font-semibold">{caller.name}</p>
         <p className="mt-1 text-white/60">mobile · incoming call…</p>
-        <p className="mt-3 text-sm text-white/40">"PICK UP IT'S AN EMERGENCY"</p>
+        <p className="mt-3 text-sm text-white/40">"{caller.line}"</p>
       </div>
       <div className="flex w-full max-w-xs justify-between">
         <span className="flex flex-col items-center gap-2 text-sm text-white/70">

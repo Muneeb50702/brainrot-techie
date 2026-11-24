@@ -3,7 +3,8 @@
 import { openStage, startRecording, encode, cover, sleep } from "./lib.mjs";
 
 const SPEED = 2.5;
-const SITE = `https://monkmode.muhammadmuneeb.tech/?speed=${SPEED}`;
+const SEED = Number(process.argv[2] || 120); // traps shuffle per run; a seed replays one plan
+const SITE = `https://monkmode.muhammadmuneeb.tech/?speed=${SPEED}&seed=${SEED}`;
 const FRAMES = "reels/frames/monkmode";
 const OUT = "reels/out/day003-monkmode.mp4";
 
@@ -47,27 +48,40 @@ const at = async (g) => {
 };
 await zoom(0.86, 900);
 
-// 3. the gauntlet (captions keyed to game time)
+// 3. the gauntlet: captions generated from this run's actual (shuffled) trap plan
+await frame.waitForFunction(() => window.__monkPlan, null, { timeout: 15000 }); // exists once the run starts
+const plan = await frame.evaluate(() => window.__monkPlan);
+const LINES = {
+  hair: `wait there's a <span class="hl">hair</span> on my screen 🪮`,
+  freeze: `it <span class="pk">froze</span>?? 🧊`,
+  dim: `my screen is turning off 🌑`,
+  lock: `it LOCKED?? <span class="hl">(it didn't)</span> 🔒`,
+  bug: `there's a BUG on my screen 🪳`,
+  crack: `my screen just <span class="pk">cracked</span> 💔`,
+  pause: `"tap to resume" ⏸ nice try`,
+  fakeover: `wait… i LOST?? 💀`,
+};
+const fo = plan.traps.find((t) => t.kind === "fakeover");
 const beats = [
   [0.2, `it starts calm…`],
-  [3.2, `then your phone starts <span class="pk">begging</span> 📲`],
-  [6.3, `wait there's a <span class="hl">hair</span> on my screen 🪮`],
-  [11.7, `it <span class="pk">froze</span>?? 🧊`],
-  [17.1, `bestie is calling 📞`],
-  [25.1, `your screen is turning off 🌑`],
-  [28.2, `it LOCKED?? <span class="hl">(it didn't)</span> 🔒`],
-  [34.2, `then: chaos mode 🔥`],
-  [42.1, `my screen just <span class="pk">cracked</span> 💔`],
-  [46.6, `"tap to resume" ⏸ nice try`],
-  [51.1, `wait… i LOST?? 💀`],
-  [56.6, `JK it was <span class="hl">FAKE</span> 🤡`],
+  [3.0, `then your phone starts <span class="pk">begging</span> 📲`],
+  ...plan.traps.map((t) => [t.at + 0.1, LINES[t.kind], t.kind]),
+  [plan.callAt + 0.1, `${plan.caller.name} is calling 📞`],
+  [fo.at + fo.dur + 0.1, `JK it was <span class="hl">FAKE</span> 🤡`],
   [60.1, `and then… you WIN 🏆`],
-];
+].sort((x, y) => x[0] - y[0]);
+// Readability: hold each caption ≥2.2 game-s (delay the next one), fill long quiet gaps.
+const FILLERS = [`STAY STRONG 🧘`, `it keeps getting worse 😭`, `don't. touch. it.`, `my thumb is shaking fr`];
+for (let i = 1, f = 0; i < beats.length; i++) {
+  const prev = beats[i - 1][0];
+  if (beats[i][0] < prev + 2.2) beats[i][0] = prev + 2.2;
+  if (beats[i][0] - prev > 7 && beats[i][0] < 59) beats.splice(i, 0, [prev + 3.6, FILLERS[f++ % FILLERS.length], "filler"]);
+}
 let coverAt = 0;
-for (const [g, text] of beats) {
+for (const [g, text, kind] of beats) {
   await at(g);
   if (g === 0.2) await badge(true);
-  if (g === 42.1) coverAt = (Date.now() - t0) / 1000 + 0.4;
+  if (kind === "crack") coverAt = (Date.now() - t0) / 1000 + 0.4;
   await cap(text);
 }
 
