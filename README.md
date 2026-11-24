@@ -8,6 +8,7 @@ every site ships to `<slug>.muhammadmuneeb.tech`, gets a reel, and the code land
 | 001 | [gitaura.muhammadmuneeb.tech](https://gitaura.muhammadmuneeb.tech) · [code](sites/gitaura) | GitHub username → aura score from real public stats (3am commits, lazy `fix` messages, stars, tutorial hell). Brutal receipt + story card. |
 | 002 | [life-exe.muhammadmuneeb.tech](https://life-exe.muhammadmuneeb.tech) · [code](sites/life-exe) | Your life as a running program: live uptime, heartbeats, km through space, years on your phone, and the stat that makes you feel old ("born closer to Pac-Man than to today"). |
 | 003 | [monkmode.muhammadmuneeb.tech](https://monkmode.muhammadmuneeb.tech) · [code](sites/monkmode) | A game about doing nothing: don't touch your phone for 60 seconds while it throws notifications, a fake call, a fake lock screen, a fake crack, a fake game over and a fake win screen at you. Tells you exactly what got you. |
+| 004 | [sukoon.muhammadmuneeb.tech](https://sukoon.muhammadmuneeb.tech) | The brainrot antidote: 48 calm generative worlds with live procedural sound. Separate project (not in this repo); its reel script lives here in [reels/sukoon.mjs](reels/sukoon.mjs). |
 
 Coming next: [IDEAS.md](IDEAS.md). Got an idea? [open an issue](../../issues).
 
