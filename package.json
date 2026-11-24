@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "description": "One brainrot Gen-Z techie website per day, each on <slug>.muhammadmuneeb.tech",
+  "license": "MIT",
+  "repository": "github:Muneeb50702/brainrot-techie",
   "scripts": {
     "dev": "node scripts/run.mjs dev",
     "build": "node scripts/run.mjs build",

@@ -49,16 +49,24 @@ const receiptTop = await frame
 await scrollTo(receiptTop, 1600);
 await sleep(1200);
 await scrollTo(receiptTop + 260, 1400);
-await sleep(700);
+await sleep(500);
 
-// 6. end card
+// 6. open source flex (scroll to the footer's GitHub pill)
+await cap(`oh and it's <span class="hl">open source</span> 🫡<br>steal my code fr`);
+await scrollTo(99999, 1300);
+await sleep(300);
+await tap(frame.locator('a[href*="github.com/Muneeb50702"]').first());
+await sleep(1500);
+
+// 7. end card
 await zoom(0.74, 500);
 await end(`
   <div class="k pop">CHECK UR AURA 👇</div>
   <div class="u pop" style="animation-delay:.08s">gitaura.<br>muhammadmuneeb.tech</div>
   <div class="d pop" style="animation-delay:.16s">DAY 001 · a brainrot website every day</div>
-  <div class="c pop" style="animation-delay:.28s">comment ur score 💬</div>`);
-await sleep(3200);
+  <div class="g pop" style="animation-delay:.24s">⭐ code: github.com/Muneeb50702/brainrot-techie</div>
+  <div class="c pop" style="animation-delay:.34s">comment ur score 💬</div>`);
+await sleep(3400);
 
 const frames = await stop();
 console.log(`recorded ${(Date.now() - t0) / 1000}s`);

@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { AnimatePresence } from "motion/react";
 import { DayBadge } from "@kit/DayBadge";
 import { Bolt } from "@kit/Bolt";
+import { SourceLink } from "@kit/SourceLink";
 import { BRAND } from "@kit/brand";
 import { cleanUsername, fetchGitHub, GhError, isValidUsername, type GhData, type GhErrorKind } from "./github";
 import { computeAura, type AuraResult } from "./aura";
@@ -92,6 +93,7 @@ export default function App() {
         </main>
 
         <footer className="pb-8 pt-6 text-center font-mono text-[11px] leading-relaxed text-muted">
+          <SourceLink slug="gitaura" className="mb-4" />
           <p>public data only · runs 100% in your browser · not affiliated with github</p>
           <p className="mt-1">
             day {DAY} of {BRAND.series} ·{" "}

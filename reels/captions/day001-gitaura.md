@@ -11,6 +11,8 @@ drop your username → gitaura.muhammadmuneeb.tech (link in bio)
 
 it reads your public commits, stars, 3am commits and every lazy "fix" message, then prints you a receipt 🧾
 
+and it's open source → github.com/Muneeb50702/brainrot-techie (steal it, star it ⭐)
+
 comment your score. lowest aura gets roasted on my story tomorrow 👇
 
 day 1 of building a brainrot website every day
