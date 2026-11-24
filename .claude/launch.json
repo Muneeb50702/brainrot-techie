@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "gitaura",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/run.mjs", "dev", "gitaura", "--port", "5173", "--strictPort"],
+      "port": 5173
+    }
+  ]
+}

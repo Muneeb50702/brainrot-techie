@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <!-- 9:16 reel stage: 540x960 CSS at DPR 2 = 1080x1920. Live site runs in the phone iframe. -->
+    <style>
+      @font-face { font-family: "Brico"; src: url("/fonts/brico.woff2") format("woff2"); font-weight: 200 800; }
+      @font-face { font-family: "JBM"; src: url("/fonts/jbm.woff2") format("woff2"); font-weight: 100 800; }
+      html, body { margin: 0; width: 540px; height: 960px; overflow: hidden; background: #07070a; }
+      .bg {
+        position: absolute; inset: 0;
+        background:
+          radial-gradient(70% 40% at 15% 8%, rgba(124, 92, 255, 0.5), transparent 70%),
+          radial-gradient(60% 40% at 95% 95%, rgba(255, 61, 165, 0.38), transparent 70%),
+          radial-gradient(45% 30% at 90% 40%, rgba(198, 255, 61, 0.16), transparent 70%),
+          #07070a;
+      }
+      .grid {
+        position: absolute; inset: 0;
+        background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+        background-size: 27px 27px;
+        -webkit-mask-image: radial-gradient(circle at 50% 35%, #000 25%, transparent 75%);
+      }
+      #cap {
+        position: absolute; left: 22px; right: 22px; top: 78px; height: 170px;
+        display: flex; align-items: center; justify-content: center; text-align: center;
+        font-family: "Brico"; font-weight: 800; font-size: 34px; line-height: 1.05; letter-spacing: -0.035em; color: #fff;
+      }
+      #cap .in { transition: transform 0.42s cubic-bezier(0.2, 1.5, 0.4, 1), opacity 0.18s ease-out; }
+      #cap.hide .in { transform: scale(0.82) translateY(10px); opacity: 0; transition-duration: 0.16s; }
+      .hl { display: inline-block; background: #c6ff3d; color: #07070a; padding: 0 0.16em; border-radius: 0.16em; transform: rotate(-2deg); box-shadow: 3px 3px 0 #000; }
+      .pk { color: #ff3da5; }
+      .lm { color: #c6ff3d; }
+      #phone {
+        position: absolute; left: 50%; top: 262px; width: 390px; height: 844px;
+        transform-origin: top center; transform: translateX(-50%) scale(0.74);
+        border-radius: 48px; overflow: hidden; border: 9px solid #17171f;
+        box-shadow: 0 0 0 2px #2c2c38, 0 40px 140px -30px rgba(198, 255, 61, 0.45);
+      }
+      #phone iframe { width: 390px; height: 844px; border: 0; display: block; background: #07070a; }
+      #end {
+        position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+        background: rgba(7, 7, 10, 0.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+        font-family: "Brico"; color: #fff; text-align: center; transition: opacity 0.35s ease-out;
+      }
+      #end.hide { opacity: 0; pointer-events: none; }
+      #end .k { font-family: "JBM"; font-size: 15px; letter-spacing: 0.3em; color: #8b8b9c; }
+      #end .u { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; color: #c6ff3d; }
+      #end .d { font-family: "JBM"; font-weight: 800; font-size: 14px; background: #c6ff3d; color: #07070a; padding: 6px 14px; border-radius: 999px; }
+      #end .c { font-size: 26px; font-weight: 800; }
+      #end .pop { animation: pop 0.5s cubic-bezier(0.2, 1.5, 0.4, 1) both; }
+      @keyframes pop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+  </head>
+  <body>
+    <div class="bg"></div>
+    <div class="grid"></div>
+    <div id="cap" class="hide"><div class="in"></div></div>
+    <div id="phone"><iframe id="site" allow="clipboard-write"></iframe></div>
+    <div id="end" class="hide"></div>
+    <script>
+      window.cap = async (html) => {
+        const c = document.getElementById("cap");
+        c.classList.add("hide");
+        await new Promise((r) => setTimeout(r, 170));
+        c.querySelector(".in").innerHTML = html;
+        c.classList.remove("hide");
+      };
+      /** Camera move: scale the phone from its top-center (bottom bleeds off-frame). */
+      window.zoom = (s, ms = 700) => {
+        const p = document.getElementById("phone");
+        p.style.transition = `transform ${ms}ms cubic-bezier(0.16, 1, 0.3, 1)`;
+        p.style.transform = `translateX(-50%) scale(${s})`;
+      };
+      window.end = (html) => {
+        const e = document.getElementById("end");
+        e.innerHTML = html;
+        e.classList.remove("hide");
+      };
+    </script>
+  </body>
+</html>

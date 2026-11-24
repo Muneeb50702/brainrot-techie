@@ -1,0 +1,12 @@
+{
+  // Assets-only Worker: no script, static requests are free + unlimited.
+  // custom_domain makes Cloudflare create the DNS record + SSL cert on deploy.
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "rot-gitaura",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [{ "pattern": "gitaura.muhammadmuneeb.tech", "custom_domain": true }]
+}
