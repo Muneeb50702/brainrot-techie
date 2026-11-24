@@ -8,7 +8,7 @@ Infra: 🟢 static only · 🤖 needs the shared AI proxy · 🗄️ needs the s
 | # | Status | Slug | What it is | Infra |
 |---|---|---|---|---|
 | 001 | ✅ | [`gitaura`](https://gitaura.muhammadmuneeb.tech) | GitHub username → aura score from real public stats, brutal receipt + story card | 🟢 |
-| 002 | 💡 | `corpospeak` | Corporate ↔ Gen-Z translator, both directions ("per my last email" → "bro can you read 💀") | 🤖 |
+| 002 | ✅ | [`corpospeak`](https://corpospeak.muhammadmuneeb.tech) | Corporate ↔ Gen-Z translator, both directions, real meaning + red flag score | 🤖 |
 | 003 | 💡 | `linkedout` | Rate companies on ghosting rate, "we're a family" index, pizza-party-to-raise ratio. Hall of Ghosts | 🗄️ |
 | 004 | 💡 | `fridaydeploy` | Game: it's 4:59pm Friday, ship to prod dodging bugs, PMs and "quick question?" pings | 🟢 |
 | 005 | 💡 | `skillissue` | Paste an error → verdict "skill issue / not a skill issue" + the real fix | 🤖 |

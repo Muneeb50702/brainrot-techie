@@ -6,6 +6,8 @@ export const BRAND = {
   instagram: "",
   /** Public source repo. Every site links its own folder from here. */
   repo: "https://github.com/Muneeb50702/brainrot-techie",
+  /** Shared AI backend (workers/rot-api). */
+  api: "https://rot-api.muhammadmuneeb.tech",
 } as const;
 
 export const sourceUrl = (slug: string) => `${BRAND.repo}/tree/main/sites/${slug}`;
