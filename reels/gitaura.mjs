@@ -53,8 +53,9 @@ await sleep(500);
 
 // 6. open source flex (scroll to the footer's GitHub pill)
 await cap(`oh and it's <span class="hl">open source</span> 🫡<br>steal my code fr`);
+await zoom(0.74, 700); // pull back so the footer pill is in frame
 await scrollTo(99999, 1300);
-await sleep(300);
+await sleep(400);
 await tap(frame.locator('a[href*="github.com/Muneeb50702"]').first());
 await sleep(1500);
 
