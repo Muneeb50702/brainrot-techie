@@ -10,6 +10,7 @@ every site ships to `<slug>.muhammadmuneeb.tech`, gets a reel, and the code land
 | 003 | [monkmode.muhammadmuneeb.tech](https://monkmode.muhammadmuneeb.tech) · [code](sites/monkmode) | A game about doing nothing: don't touch your phone for 60 seconds while it throws notifications, a fake call, a fake lock screen, a fake crack, a fake game over and a fake win screen at you. Tells you exactly what got you. |
 | 004 | [sukoon.muhammadmuneeb.tech](https://sukoon.muhammadmuneeb.tech) | The brainrot antidote: 48 calm generative worlds with live procedural sound. Separate project (not in this repo); its reel script lives here in [reels/sukoon.mjs](reels/sukoon.mjs). |
 | 005 | [cooked.muhammadmuneeb.tech](https://cooked.muhammadmuneeb.tech) · [code](sites/cooked) | How cooked is your brain? Four real cognitive tests (reaction time, spatial memory span, Stroop, vigilance under fake notifications) scored against typical human results, delivered as a stamped lab report from raw 🥩 to charcoal 💀. |
+| 006 | [autocorrupt.muhammadmuneeb.tech](https://autocorrupt.muhammadmuneeb.tech) · [code](sites/autocorrupt) | Autocorrect has gone rogue: text your mom, boss and crush while it swaps your words for brainrot (and re-curses words you fixed). They react to whatever survives. "dignity preserved: 36%". |
 
 Coming next: [IDEAS.md](IDEAS.md). Got an idea? [open an issue](../../issues).
 

@@ -11,6 +11,7 @@ const FONTS = {
   "/fonts/brico.woff2": "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2",
   "/fonts/jbm.woff2": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2",
   "/fonts/archivo.woff2": "node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2",
+  "/fonts/pixelify.woff2": "node_modules/@fontsource-variable/pixelify-sans/files/pixelify-sans-latin-wght-normal.woff2",
 };
 
 /** Cut a highlights edit: keep only [start, end] spans (seconds) of `src`, jump-cut together. */

@@ -1,0 +1,66 @@
+@import "tailwindcss";
+@import "../../../packages/kit/src/kit.css";
+@source "../../../packages/kit/src";
+
+/* Day 006 theme: cursed messenger. Lilac sky, electric-blue bubbles, a hot-pink pixel villain,
+   and the red spell-check squiggle marking every word the rogue autocorrect touched. */
+@theme {
+  --font-display: "Pixelify Sans Variable", ui-monospace, monospace;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+  --font-chat: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --color-lilac: #e7e3ff;
+  --color-bubble: #2b59ff;
+  --color-grey: #ebe8f5;
+  --color-villain: #ff3e9a;
+  --color-squiggle: #ff2d55;
+  --color-acid: #ffe94d;
+  --color-mint: #19c37d;
+
+  --color-ink: #160f2e;
+  --color-ink-2: #231a45;
+  --color-line: #d3cdf0;
+  --color-paper: #ffffff;
+  --color-muted: #6d6492;
+
+  /* kit slots → this palette */
+  --color-lime: #ffe94d;
+  --color-pink: #ff3e9a;
+  --color-cyan: #2b59ff;
+  --color-violet: #8b5cf6;
+}
+
+html {
+  color-scheme: light;
+  background: var(--color-lilac);
+}
+body {
+  color: var(--color-ink);
+  overflow-x: clip;
+  background-color: var(--color-lilac);
+  background-image: radial-gradient(rgba(22, 15, 46, 0.09) 1.4px, transparent 1.4px);
+  background-size: 18px 18px;
+}
+
+/* the word autocorrect touched */
+.cursed {
+  text-decoration: underline wavy var(--color-squiggle);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  text-decoration-skip-ink: none;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); filter: none; }
+  20% { transform: translate(-3px, 1px); filter: hue-rotate(90deg); }
+  40% { transform: translate(3px, -1px); clip-path: inset(10% 0 40% 0); }
+  60% { transform: translate(-2px, 0); clip-path: inset(50% 0 5% 0); }
+  80% { transform: translate(2px, 1px); filter: hue-rotate(-60deg); }
+  100% { transform: translate(0); filter: none; clip-path: none; }
+}
+.glitch-in { animation: glitch 0.32s steps(2) 1; }
+
+@keyframes typing-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}

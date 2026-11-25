@@ -52,6 +52,19 @@
         "--strictPort"
       ],
       "port": 5176
+    },
+    {
+      "name": "autocorrupt",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/run.mjs",
+        "dev",
+        "autocorrupt",
+        "--port",
+        "5177",
+        "--strictPort"
+      ],
+      "port": 5177
     }
   ]
 }

@@ -19,6 +19,10 @@ Infra: 🟢 static only · 🗄️ shared state (Cloudflare free tier, still $0)
 | 003 | ✅ | [`monkmode`](https://monkmode.muhammadmuneeb.tech) | Game: don't touch your phone for 60s while it throws 9 psychological traps at you (fake hair, freeze, lock screen, crack, fake game over, fake win) | 🟢 |
 | 004 | ✅ | [`sukoon`](https://sukoon.muhammadmuneeb.tech) | The brainrot antidote: 48 calm generative worlds with live procedural sound (separate project at `D:\sukoon`, not in this repo) | 🟢 |
 | 005 | ✅ | [`cooked`](https://cooked.muhammadmuneeb.tech) | How cooked is your brain? 4 real tests (reaction time, memory span, Stroop, focus vs notifications) → lab report from raw to charcoal | 🟢 |
+| 006 | ✅ | [`autocorrupt`](https://autocorrupt.muhammadmuneeb.tech) | Autocorrect has gone rogue: type texts to mom/boss/crush while it swaps your words for brainrot; they react to what survives. "dignity preserved: 23%" | 🟢 |
+| | 💡 **next** | `screamload` | Scream to download: a fake download bar only moves while your mic hears you. Louder = faster. "4.2 GB at 104 dB" (best reel = you screaming at your phone) | 🟢 |
+| | 💡 | `yapcheck` | Talk for 60 s without pausing (mic voice-activity); "certified yapper" vs "NPC with 3 dialogue lines" | 🟢 |
+| | 💡 | `grasscheck` | Prove you touched grass: camera green + blade-texture analysis on-device → certificate ("that's a hoodie, bestie") | 🟢 |
 | | 💡 | `slangorstack` | JS framework or Gen-Alpha slang? 10 rounds, real npm names | 🟢 |
 | | 💡 | `fridaydeploy` | Game: it's 4:59pm Friday, ship to prod dodging bugs, PMs and "quick question?" pings | 🟢 |
 | | 💡 | `dontbreakprod` | One global "days since last incident" counter. Anyone can press the red button | 🗄️ |
@@ -35,7 +39,7 @@ Infra: 🟢 static only · 🗄️ shared state (Cloudflare free tier, still $0)
 | | 💡 | `contribgraph` | The internet's shared contribution graph, one green square per visitor per day | 🗄️ |
 | | 💡 | `doomscroll` | Infinite scroll, global km scrolled, compared to landmarks | 🗄️ |
 | | ⏸️ | `corpospeak` | Corporate ↔ Gen-Z translator (built with Claude, pulled for cost; code at commit `4f2d250`) | |
-| | ⏸️ | `skillissue`, `yapcombinator`, `broetry`, `brainrotpedia`, `rizztherecruiter`, `touchgrass` | needed an LLM. Rework as curated/quiz versions or skip | |
+| | ⏸️ | `skillissue`, `yapcombinator`, `broetry`, `brainrotpedia`, `rizztherecruiter` | needed an LLM. Rework as curated/quiz versions or skip | |
 
 ## Ground rules
 - Parody names ✅, cloned logos or brand look ❌ (no takedowns).
