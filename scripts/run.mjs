@@ -36,11 +36,31 @@ switch (cmd) {
     vite("build");
     vite("preview", ...rest);
     break;
-  case "deploy":
+  case "deploy": {
     vite("build");
     run("npx", ["wrangler", "deploy", "--config", `${dir}/wrangler.jsonc`]);
-    console.log(`\n✅ live at https://${slug}.muhammadmuneeb.tech`);
+    // A brand-new custom domain needs a few seconds before its DNS record exists. Asking the
+    // local router too early makes it cache "doesn't exist" for 30 min (the zone's negative TTL),
+    // so confirm through Cloudflare's own DNS-over-HTTPS first, and only then hit the site.
+    const host = `${slug}.muhammadmuneeb.tech`;
+    const dnsReady = async () => {
+      const r = await fetch(`https://cloudflare-dns.com/dns-query?name=${host}&type=A`, { headers: { accept: "application/dns-json" } });
+      const j = await r.json();
+      return j.Status === 0 && Array.isArray(j.Answer) && j.Answer.length > 0;
+    };
+    let ok = false;
+    for (let i = 0; i < 40 && !ok; i++) {
+      ok = await dnsReady().catch(() => false);
+      if (!ok) await new Promise((res) => setTimeout(res, 3000));
+    }
+    if (!ok) {
+      console.log(`\n⏳ deployed, but DNS for ${host} isn't up yet. Don't open it for a minute.`);
+      break;
+    }
+    const status = await fetch(`https://${host}/`).then((r) => r.status).catch(() => 0);
+    console.log(`\n✅ live at https://${host} (DNS confirmed via 1.1.1.1, HTTP ${status || "pending"})`);
     break;
+  }
   default:
     console.error(`unknown command: ${cmd}`);
     process.exit(1);
