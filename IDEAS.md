@@ -18,6 +18,7 @@ Infra: 🟢 static only · 🗄️ shared state (Cloudflare free tier, still $0)
 | 002 | ✅ | [`life-exe`](https://life-exe.muhammadmuneeb.tech) | Your life as a running program: live heartbeats, km through space, "born closer to Pac-Man than to today" | 🟢 |
 | 003 | ✅ | [`monkmode`](https://monkmode.muhammadmuneeb.tech) | Game: don't touch your phone for 60s while it throws 9 psychological traps at you (fake hair, freeze, lock screen, crack, fake game over, fake win) | 🟢 |
 | 004 | ✅ | [`sukoon`](https://sukoon.muhammadmuneeb.tech) | The brainrot antidote: 48 calm generative worlds with live procedural sound (separate project at `D:\sukoon`, not in this repo) | 🟢 |
+| 005 | ✅ | [`cooked`](https://cooked.muhammadmuneeb.tech) | How cooked is your brain? 4 real tests (reaction time, memory span, Stroop, focus vs notifications) → lab report from raw to charcoal | 🟢 |
 | | 💡 | `slangorstack` | JS framework or Gen-Alpha slang? 10 rounds, real npm names | 🟢 |
 | | 💡 | `fridaydeploy` | Game: it's 4:59pm Friday, ship to prod dodging bugs, PMs and "quick question?" pings | 🟢 |
 | | 💡 | `dontbreakprod` | One global "days since last incident" counter. Anyone can press the red button | 🗄️ |
@@ -34,7 +35,7 @@ Infra: 🟢 static only · 🗄️ shared state (Cloudflare free tier, still $0)
 | | 💡 | `contribgraph` | The internet's shared contribution graph, one green square per visitor per day | 🗄️ |
 | | 💡 | `doomscroll` | Infinite scroll, global km scrolled, compared to landmarks | 🗄️ |
 | | ⏸️ | `corpospeak` | Corporate ↔ Gen-Z translator (built with Claude, pulled for cost; code at commit `4f2d250`) | |
-| | ⏸️ | `skillissue`, `yapcombinator`, `broetry`, `brainrotpedia`, `rizztherecruiter`, `amicooked`, `touchgrass` | needed an LLM. Rework as curated/quiz versions or skip | |
+| | ⏸️ | `skillissue`, `yapcombinator`, `broetry`, `brainrotpedia`, `rizztherecruiter`, `touchgrass` | needed an LLM. Rework as curated/quiz versions or skip | |
 
 ## Ground rules
 - Parody names ✅, cloned logos or brand look ❌ (no takedowns).

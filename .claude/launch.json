@@ -4,20 +4,54 @@
     {
       "name": "gitaura",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["scripts/run.mjs", "dev", "gitaura", "--port", "5173", "--strictPort"],
+      "runtimeArgs": [
+        "scripts/run.mjs",
+        "dev",
+        "gitaura",
+        "--port",
+        "5173",
+        "--strictPort"
+      ],
       "port": 5173
     },
     {
       "name": "life-exe",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["scripts/run.mjs", "dev", "life-exe", "--port", "5174", "--strictPort"],
+      "runtimeArgs": [
+        "scripts/run.mjs",
+        "dev",
+        "life-exe",
+        "--port",
+        "5174",
+        "--strictPort"
+      ],
       "port": 5174
     },
     {
       "name": "monkmode",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["scripts/run.mjs", "dev", "monkmode", "--port", "5175", "--strictPort"],
+      "runtimeArgs": [
+        "scripts/run.mjs",
+        "dev",
+        "monkmode",
+        "--port",
+        "5175",
+        "--strictPort"
+      ],
       "port": 5175
+    },
+    {
+      "name": "cooked",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/run.mjs",
+        "dev",
+        "cooked",
+        "--port",
+        "5176",
+        "--strictPort"
+      ],
+      "port": 5176
     }
   ]
 }

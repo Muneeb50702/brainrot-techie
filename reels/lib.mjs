@@ -10,7 +10,23 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const FONTS = {
   "/fonts/brico.woff2": "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2",
   "/fonts/jbm.woff2": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2",
+  "/fonts/archivo.woff2": "node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2",
 };
+
+/** Cut a highlights edit: keep only [start, end] spans (seconds) of `src`, jump-cut together. */
+export function cutHighlights(src, spans, out) {
+  const parts = spans.map(([a, b], i) => `[0:v]trim=start=${a.toFixed(3)}:end=${b.toFixed(3)},setpts=PTS-STARTPTS[v${i}]`);
+  const graph = `${parts.join(";")};${spans.map((_, i) => `[v${i}]`).join("")}concat=n=${spans.length}:v=1:a=0[out]`;
+  const r = spawnSync(
+    "ffmpeg",
+    ["-y", "-loglevel", "error", "-i", src, "-filter_complex", graph, "-map", "[out]", "-r", "30",
+     "-c:v", "libx264", "-preset", "slow", "-crf", "17", "-profile:v", "high", "-pix_fmt", "yuv420p", "-movflags", "+faststart", out],
+    { stdio: "inherit" },
+  );
+  if (r.status !== 0) throw new Error("ffmpeg cut failed");
+  const total = spans.reduce((s, [a, b]) => s + (b - a), 0);
+  console.log(`✂️  ${out}  (${spans.length} cuts, ${total.toFixed(1)}s)`);
+}
 const EDGE = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe";
 const CHROME = "C:/Program Files/Google/Chrome/Application/chrome.exe";
 
@@ -83,7 +99,7 @@ export async function openStage(siteUrl, { headless = true } = {}) {
 
 async function waitForFrame(page, siteUrl) {
   const host = new URL(siteUrl).host;
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 300; i++) { // up to 30 s: slow networks shouldn't kill a recording
     const f = page.frames().find((fr) => fr.url().includes(host));
     if (f) return f;
     await sleep(100);
