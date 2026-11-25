@@ -9,7 +9,7 @@ export function DayBadge({ day, className }: { day: number; className?: string }
       target="_blank"
       rel="noreferrer"
       className={cn(
-        "group inline-flex items-center gap-2 rounded-full border border-line bg-ink/70 py-1 pl-1 pr-3 font-mono text-[11px] tracking-wide text-muted backdrop-blur-md transition-colors hover:text-white",
+        "group inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-line bg-ink/70 py-1 pl-1 pr-3 font-mono text-[11px] tracking-wide text-muted backdrop-blur-md transition-colors hover:text-white",
         className,
       )}
     >

@@ -11,6 +11,7 @@ every site ships to `<slug>.muhammadmuneeb.tech`, gets a reel, and the code land
 | 004 | [sukoon.muhammadmuneeb.tech](https://sukoon.muhammadmuneeb.tech) | The brainrot antidote: 48 calm generative worlds with live procedural sound. Separate project (not in this repo); its reel script lives here in [reels/sukoon.mjs](reels/sukoon.mjs). |
 | 005 | [cooked.muhammadmuneeb.tech](https://cooked.muhammadmuneeb.tech) · [code](sites/cooked) | How cooked is your brain? Four real cognitive tests (reaction time, spatial memory span, Stroop, vigilance under fake notifications) scored against typical human results, delivered as a stamped lab report from raw 🥩 to charcoal 💀. |
 | 006 | [autocorrupt.muhammadmuneeb.tech](https://autocorrupt.muhammadmuneeb.tech) · [code](sites/autocorrupt) | Autocorrect has gone rogue: text your mom, boss and crush while it swaps your words for brainrot (and re-curses words you fixed). They react to whatever survives. "dignity preserved: 36%". |
+| 007 | [screamload.muhammadmuneeb.tech](https://screamload.muhammadmuneeb.tech) · [code](sites/screamload) | Scream to download: a 4.20 GB "free RAM" download that only moves while your mic hears you. Louder = faster, silence = paused, the neighbours escalate from asleep to calling the police. Mic audio stays on-device (only loudness is measured); tap mode for libraries. |
 
 Coming next: [IDEAS.md](IDEAS.md). Got an idea? [open an issue](../../issues).
 

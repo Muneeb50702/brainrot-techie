@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import "../../../packages/kit/src/kit.css";
+@source "../../../packages/kit/src";
+
+/* Day 007 theme: loudness hazard. Black, hazard yellow, safety orange, warning tape,
+   huge condensed Anton and Martian Mono read-outs. Everything shakes when you're loud. */
+@theme {
+  --font-display: "Anton", Impact, "Arial Narrow", sans-serif;
+  --font-mono: "Martian Mono Variable", ui-monospace, monospace;
+
+  --color-hazard: #ffd400;
+  --color-safety: #ff5a1f;
+  --color-alarm: #ff2a2a;
+  --color-signal: #39ff88;
+
+  --color-ink: #0b0b0b;
+  --color-ink-2: #161616;
+  --color-line: #2c2c28;
+  --color-paper: #f5f5f0;
+  --color-muted: #8a8a80;
+
+  --color-lime: #ffd400;
+  --color-pink: #ff5a1f;
+  --color-cyan: #39ff88;
+  --color-violet: #ff2a2a;
+}
+
+html {
+  background: var(--color-ink);
+}
+body {
+  color: var(--color-paper);
+  overflow-x: clip;
+}
+
+.tape {
+  background: repeating-linear-gradient(-45deg, var(--color-hazard) 0 18px, var(--color-ink) 18px 36px);
+}
+.tape-thin {
+  background: repeating-linear-gradient(-45deg, var(--color-hazard) 0 10px, var(--color-ink) 10px 20px);
+}
+
+/* progress fill: moving warning stripes, speed driven by --spd */
+.stripes {
+  background: repeating-linear-gradient(-45deg, var(--color-hazard) 0 14px, var(--color-safety) 14px 28px);
+  background-size: 40px 40px;
+  animation: crawl var(--spd, 0s) linear infinite;
+}
+@keyframes crawl {
+  from { background-position: 0 0; }
+  to { background-position: 40px 0; }
+}
+
+@keyframes rumble {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(calc(var(--amp, 2px) * -1), var(--amp, 2px)); }
+  50% { transform: translate(var(--amp, 2px), calc(var(--amp, 2px) * -0.5)); }
+  75% { transform: translate(calc(var(--amp, 2px) * -0.6), calc(var(--amp, 2px) * -1)); }
+}
+.rumble { animation: rumble 0.12s linear infinite; }

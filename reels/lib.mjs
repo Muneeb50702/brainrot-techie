@@ -12,6 +12,8 @@ const FONTS = {
   "/fonts/jbm.woff2": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2",
   "/fonts/archivo.woff2": "node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2",
   "/fonts/pixelify.woff2": "node_modules/@fontsource-variable/pixelify-sans/files/pixelify-sans-latin-wght-normal.woff2",
+  "/fonts/anton.woff2": "node_modules/@fontsource/anton/files/anton-latin-400-normal.woff2",
+  "/fonts/martian.woff2": "node_modules/@fontsource-variable/martian-mono/files/martian-mono-latin-wght-normal.woff2",
 };
 
 /** Cut a highlights edit: keep only [start, end] spans (seconds) of `src`, jump-cut together. */
@@ -33,13 +35,14 @@ const CHROME = "C:/Program Files/Google/Chrome/Application/chrome.exe";
 
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-export async function openStage(siteUrl, { headless = true } = {}) {
+/** `args`: extra Chrome flags (e.g. a fake mic). `permissions`: granted to every origin (e.g. ["microphone"]). */
+export async function openStage(siteUrl, { headless = true, args = [], permissions = [] } = {}) {
   const browser = await chromium.launch({
     executablePath: existsSync(CHROME) ? CHROME : EDGE,
     headless,
-    args: ["--enable-gpu-rasterization", "--ignore-gpu-blocklist", "--use-angle=d3d11", "--hide-scrollbars", "--force-color-profile=srgb"],
+    args: ["--enable-gpu-rasterization", "--ignore-gpu-blocklist", "--use-angle=d3d11", "--hide-scrollbars", "--force-color-profile=srgb", ...args],
   });
-  const context = await browser.newContext({ viewport: { width: 540, height: 960 }, deviceScaleFactor: 2 });
+  const context = await browser.newContext({ viewport: { width: 540, height: 960 }, deviceScaleFactor: 2, permissions });
   await context.route("https://reel.stage/**", (route) => {
     const p = new URL(route.request().url()).pathname;
     if (p === "/" || p === "/stage.html")
@@ -123,6 +126,10 @@ export async function startRecording(page, dir) {
   await cdp.send("Page.startScreencast", { format: "jpeg", quality: 95, maxWidth: 1080, maxHeight: 1920, everyNthFrame: 1 });
   return async () => {
     await cdp.send("Page.stopScreencast");
+    // Chrome only sends frames when pixels change, so a static ending (an end card) would get a single
+    // 1/30 s frame. Hold the last frame until now. (frame timestamps are seconds since epoch)
+    const last = [...frames].sort((a, b) => a.t - b.t).at(-1);
+    if (last) frames.push({ file: last.file, t: Date.now() / 1000 });
     writeFileSync(path.join(dir, "frames.json"), JSON.stringify(frames));
     return frames;
   };

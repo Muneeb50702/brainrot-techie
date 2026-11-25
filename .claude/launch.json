@@ -65,6 +65,19 @@
         "--strictPort"
       ],
       "port": 5177
+    },
+    {
+      "name": "screamload",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/run.mjs",
+        "dev",
+        "screamload",
+        "--port",
+        "5178",
+        "--strictPort"
+      ],
+      "port": 5178
     }
   ]
 }

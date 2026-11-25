@@ -20,8 +20,8 @@ Infra: 🟢 static only · 🗄️ shared state (Cloudflare free tier, still $0)
 | 004 | ✅ | [`sukoon`](https://sukoon.muhammadmuneeb.tech) | The brainrot antidote: 48 calm generative worlds with live procedural sound (separate project at `D:\sukoon`, not in this repo) | 🟢 |
 | 005 | ✅ | [`cooked`](https://cooked.muhammadmuneeb.tech) | How cooked is your brain? 4 real tests (reaction time, memory span, Stroop, focus vs notifications) → lab report from raw to charcoal | 🟢 |
 | 006 | ✅ | [`autocorrupt`](https://autocorrupt.muhammadmuneeb.tech) | Autocorrect has gone rogue: type texts to mom/boss/crush while it swaps your words for brainrot; they react to what survives. "dignity preserved: 23%" | 🟢 |
-| | 💡 **next** | `screamload` | Scream to download: a fake download bar only moves while your mic hears you. Louder = faster. "4.2 GB at 104 dB" (best reel = you screaming at your phone) | 🟢 |
-| | 💡 | `yapcheck` | Talk for 60 s without pausing (mic voice-activity); "certified yapper" vs "NPC with 3 dialogue lines" | 🟢 |
+| 007 | ✅ | [`screamload`](https://screamload.muhammadmuneeb.tech) | Scream to download `free_ram_4.20GB.zip`: the bar only moves while your mic hears you, louder = faster, the neighbours escalate. Then "you can't download RAM 💀". Tap mode for libraries | 🟢 |
+| | 💡 **next** | `yapcheck` | Talk for 60 s without pausing (mic voice-activity); "certified yapper" vs "NPC with 3 dialogue lines" | 🟢 |
 | | 💡 | `grasscheck` | Prove you touched grass: camera green + blade-texture analysis on-device → certificate ("that's a hoodie, bestie") | 🟢 |
 | | 💡 | `slangorstack` | JS framework or Gen-Alpha slang? 10 rounds, real npm names | 🟢 |
 | | 💡 | `fridaydeploy` | Game: it's 4:59pm Friday, ship to prod dodging bugs, PMs and "quick question?" pings | 🟢 |
